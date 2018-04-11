@@ -19,16 +19,23 @@ class nginx::service(
   $service_name    = $::nginx::service_name,
   $service_flags   = $::nginx::service_flags,
   $service_manage  = $::nginx::service_manage,
+  $service_enable  = $::nginx::service_enable,
 ) {
 
   assert_private()
 
-  $service_enable = $service_ensure ? {
-    'running' => true,
-    'absent'  => false,
-    'stopped' => false,
-    'undef'   => undef,
-    default   => true,
+  if $service_enable != undef {
+    $service_enable_real = $service_enable
+  } else {
+    # Fallback looking at the status of the service to understand whether to
+    # enable it or not
+    $service_enable_real = $service_ensure ? {
+      'running' => true,
+      'absent'  => false,
+      'stopped' => false,
+      'undef'   => undef,
+      default   => true,
+    }
   }
 
   if $service_ensure == 'undef' {
@@ -42,7 +49,7 @@ class nginx::service(
       'OpenBSD': {
         service { $service_name:
           ensure     => $service_ensure_real,
-          enable     => $service_enable,
+          enable     => $service_enable_real,
           flags      => $service_flags,
           hasstatus  => true,
           hasrestart => true,
@@ -51,7 +58,7 @@ class nginx::service(
       default: {
         service { $service_name:
           ensure     => $service_ensure_real,
-          enable     => $service_enable,
+          enable     => $service_enable_real,
           hasstatus  => true,
           hasrestart => true,
         }

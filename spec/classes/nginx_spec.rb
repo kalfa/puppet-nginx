@@ -208,6 +208,100 @@ describe 'nginx' do
           it { is_expected.to contain_service('nginx').with_restart('a restart command') }
         end
 
+        context "when service_ensure => 'stopped' and service_enable => undef" do
+          let :params do
+            {
+              service_ensure: 'stopped'
+            }
+          end
+
+          it do
+            is_expected.to contain_service('nginx').with(
+              ensure: 'stopped',
+              enable: false
+            )
+          end
+        end
+
+        context "when service_ensure => 'running' and service_enable => undef" do
+          let :params do
+            {
+              service_ensure: 'running'
+            }
+          end
+
+          it do
+            is_expected.to contain_service('nginx').with(
+              ensure: 'running',
+              enable: true
+            )
+          end
+        end
+
+        context "when service_ensure => 'stopped' and service_enable => true" do
+          let :params do
+            {
+              service_ensure: 'stopped',
+              service_enable: true
+            }
+          end
+
+          it do
+            is_expected.to contain_service('nginx').with(
+              ensure: 'stopped',
+              enable: true
+            )
+          end
+        end
+
+        context "when service_ensure => 'running' and service_enable => true" do
+          let :params do
+            {
+              service_ensure: 'running',
+              service_enable: true
+            }
+          end
+
+          it do
+            is_expected.to contain_service('nginx').with(
+              ensure: 'running',
+              enable: true
+            )
+          end
+        end
+
+        context "when service_ensure => 'stopped' and service_enable => false" do
+          let :params do
+            {
+              service_ensure: 'stopped',
+              service_enable: false
+            }
+          end
+
+          it do
+            is_expected.to contain_service('nginx').with(
+              ensure: 'stopped',
+              enable: false
+            )
+          end
+        end
+
+        context "when service_ensure => 'running' and service_enable => false" do
+          let :params do
+            {
+              service_ensure: 'running',
+              service_enable: false
+            }
+          end
+
+          it do
+            is_expected.to contain_service('nginx').with(
+              ensure: 'running',
+              enable: false
+            )
+          end
+        end
+
         describe "when service_name => 'nginx14" do
           let :params do
             {

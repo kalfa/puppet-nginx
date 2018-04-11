@@ -155,6 +155,9 @@ class nginx (
   $service_restart                                           = undef,
   $service_name                                              = 'nginx',
   $service_manage                                            = true,
+  # Whether to enable the service. When undef the service will be enabled when
+  # $service_ensure is 'running', or disabled otherwise.
+  Optional[Boolean] $service_enable                          = undef,
   ### END Service Configuration ###
 
   ### START Hiera Lookups ###
